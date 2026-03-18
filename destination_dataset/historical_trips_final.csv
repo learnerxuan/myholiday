@@ -1,0 +1,138 @@
+destination,duration_days,traveler_age,traveler_gender,traveler_nationality,accommodation_type,accommodation_cost,transportation_type,transportation_cost
+London,7.0,35.0,Male,American,Hotel,1200.0,Flight,600.0
+Phuket,5.0,28.0,Female,Canadian,Resort,800.0,Flight,500.0
+Bali,7.0,45.0,Male,Korean,Villa,1000.0,Flight,700.0
+New York,14.0,29.0,Female,British,Hotel,2000.0,Flight,1000.0
+Tokyo,7.0,26.0,Female,Vietnamese,Airbnb,700.0,Train,200.0
+Paris,5.0,42.0,Male,American,Hotel,1500.0,Flight,800.0
+Sydney,10.0,33.0,Female,Australian,Hostel,500.0,Flight,1200.0
+Rio de Janeiro,7.0,25.0,Male,Brazilian,Airbnb,900.0,Flight,600.0
+Amsterdam,7.0,31.0,Female,Dutch,Hotel,1200.0,Train,200.0
+Dubai,7.0,39.0,Male,Emirati,Resort,2500.0,Flight,800.0
+Cancun,7.0,27.0,Female,Mexican,Hotel,1000.0,Flight,500.0
+Barcelona,7.0,36.0,Male,Spanish,Airbnb,800.0,Train,100.0
+Honolulu,8.0,29.0,Female,Chinese,Resort,3000.0,Flight,1200.0
+Berlin,9.0,48.0,Male,German,Hotel,1400.0,Flight,700.0
+Marrakech,7.0,26.0,Female,Moroccan,Riad,600.0,Flight,400.0
+Edinburgh,7.0,32.0,Male,Scottish,Hotel,900.0,Train,150.0
+Paris,9.0,30.0,Female,American,Hotel,,Plane,
+Bali,10.0,28.0,Male,Chinese,Resort,,Plane,
+London,6.0,35.0,Female,British,Hotel,,Train,
+Tokyo,10.0,45.0,Male,Japanese,Hotel,,Plane,
+New York,5.0,27.0,Female,American,Airbnb,,Bus,
+Sydney,7.0,32.0,Male,Australian,Hotel,,Plane,
+Rome,7.0,29.0,Female,Italian,Airbnb,,Train,
+Bangkok,8.0,40.0,Male,Indian,Hostel,,Plane,
+Paris,6.0,24.0,Female,Vietnamese,Hotel,,Train,
+Hawaii,9.0,34.0,Male,Korean,Resort,,Plane,
+Barcelona,8.0,31.0,Female,Spanish,Hotel,,Train,
+Japan,8.0,30.0,Female,American,Hotel,,Plane,
+Thailand,7.0,45.0,Male,Canadian,Hostel,,Train,
+France,9.0,25.0,Male,Korean,Airbnb,,Car rental,
+Australia,13.0,28.0,Female,British,Hotel,,Car rental,
+Brazil,9.0,33.0,Female,Australian,Hostel,,Bus,
+Greece,8.0,20.0,Male,American,Airbnb,,Plane,
+Egypt,7.0,37.0,Female,Canadian,Hotel,,Train,
+Mexico,10.0,42.0,Male,British,Airbnb,,Plane,
+Italy,6.0,31.0,Female,American,Hostel,,Train,
+Spain,8.0,27.0,Male,Korean,Hotel,,Car rental,
+Canada,7.0,38.0,Female,Australian,Airbnb,,Bus,
+Paris,7.0,25.0,Female,American,Hotel,1400.0,Plane,600.0
+Sydney,7.0,33.0,Male,Canadian,Airbnb,800.0,Train,150.0
+Tokyo,8.0,28.0,Female,Chinese,Hostel,500.0,Plane,900.0
+Cancun,7.0,45.0,Male,American,Resort,2200.0,Plane,800.0
+Rio de Janeiro,7.0,30.0,Female,Brazilian,Hotel,1200.0,Plane,700.0
+London,7.0,55.0,Male,British,Airbnb,900.0,Train,100.0
+Barcelona,7.0,27.0,Female,Spanish,Hostel,600.0,Plane,600.0
+New York City,7.0,41.0,Male,American,Hotel,1500.0,Plane,500.0
+Bangkok,6.0,29.0,Female,Indian,Airbnb,500.0,Bus,50.0
+Vancouver,7.0,24.0,Male,Korean,Hostel,400.0,Train,150.0
+Amsterdam,8.0,31.0,Female,Dutch,Hotel,1100.0,Plane,700.0
+Paris,7.0,31.0,Female,Canadian,Hotel,,Train,
+Tokyo,10.0,25.0,Male,American,Hostel,,Bus,
+Sydney,7.0,27.0,Female,South Korean,Airbnb,,Car rental,
+New York,7.0,28.0,Female,Canadian,Hotel,,Flight,
+Rio de Janeiro,9.0,30.0,Male,Brazilian,Airbnb,,Train,
+Bangkok,8.0,23.0,Female,Indian,Hostel,,Bus,
+London,8.0,35.0,Male,British,Hotel,,Train,
+Barcelona,8.0,29.0,Female,Spanish,Airbnb,,Car rental,
+Seoul,8.0,27.0,Male,South Korean,Hostel,,Subway,
+Los Angeles,7.0,26.0,Male,Chinese,Hotel,,Car rental,
+Rome,8.0,33.0,Female,Italian,Airbnb,,Train,
+Paris,6.0,35.0,Female,American,Hotel,1200.0,Plane,800.0
+Tokyo,7.0,28.0,Male,Japanese,Hostel,400.0,Train,300.0
+Cape Town,9.0,29.0,Female,British,Vacation rental,800.0,Car rental,200.0
+Sydney,6.0,43.0,Male,Australian,Hotel,1500.0,Plane,1200.0
+Barcelona,7.0,31.0,Female,Spanish,Vacation rental,900.0,Plane,700.0
+Bali,7.0,27.0,Male,American,Resort,2200.0,Plane,1000.0
+Paris,6.0,39.0,Female,French,Hotel,1100.0,Train,200.0
+New York,6.0,25.0,Male,American,Vacation rental,1000.0,Plane,800.0
+Bangkok,8.0,33.0,Female,Indian,Hostel,300.0,Plane,700.0
+Rome,6.0,41.0,Male,Italian,Hotel,1300.0,Train,100.0
+Bali,8.0,37.0,Female,British,Resort,1800.0,Plane,1000.0
+Bali,7.0,35.0,Female,South Korean,Resort,,Plane,
+Tokyo,8.0,29.0,Male,American,Hotel,,Train,
+Cancun,7.0,42.0,Female,Mexican,Resort,,Plane,
+Paris,7.0,46.0,Male,British,Hotel,,Plane,
+Cape Town,9.0,31.0,Male,South African,Guesthouse,,Car,
+Bali,7.0,25.0,Female,Taiwanese,Resort,,Plane,
+Sydney,7.0,38.0,Male,Australian,Hotel,,Plane,
+Bangkok,7.0,27.0,Female,Korean,Hotel,,Plane,
+New York,7.0,60.0,Male,American,Hotel,,Plane,
+Phuket,7.0,32.0,Female,British,Resort,,Plane,
+Rome,7.0,41.0,Male,American,Hotel,100.0,,
+Paris,6.0,35.0,Male,American,Hotel,,Plane,
+Tokyo,10.0,28.0,Female,Korean,Airbnb,,Train,
+Bali,11.0,42.0,Female,Spanish,Resort,,Plane,
+Sydney,9.0,45.0,Male,Australian,Hotel,,Plane,
+New York,6.0,31.0,Female,American,Airbnb,,Car rental,
+London,11.0,29.0,Male,British,Hostel,,Plane,
+Dubai,8.0,24.0,Female,Emirati,Hotel,,Plane,
+Bangkok,7.0,26.0,Male,Vietnamese,Airbnb,,Train,
+Rome,11.0,30.0,Female,Italian,Hostel,,Plane,
+Bali,11.0,33.0,Male,Indonesian,Villa,,Car rental,
+Seoul,10.0,27.0,Female,Korean,Hotel,,Train,
+Paris,5.0,35.0,Male,USA,Hotel,,Plane,
+Tokyo,9.0,28.0,Female,Canada,Airbnb,,Train,
+Sydney,9.0,45.0,Male,South Korea,Hostel,,Plane,
+London,5.0,37.0,Female,UK,Hotel,,Plane,
+New York,6.0,50.0,Male,China,Airbnb,,Car rental,
+Rome,7.0,31.0,Female,Taiwan,Hotel,,Plane,
+Bangkok,8.0,42.0,Male,Japan,Hostel,,Train,
+Cape Town,8.0,27.0,Female,Spain,Airbnb,,Plane,
+Rio de Janeiro,7.0,33.0,Male,Brazil,Hotel,,Car rental,
+Bali,6.0,29.0,Female,South Korea,Villa,,Plane,
+Amsterdam,7.0,41.0,Male,Germany,Hotel,,Train,
+Paris,5.0,35.0,Male,USA,Hotel,1000.0,Plane,800.0
+Tokyo,9.0,28.0,Female,South Korea,Airbnb,800.0,Train,500.0
+New York,5.0,42.0,Male,Hong Kong,Hotel,1200.0,Car rental,200.0
+Bali,8.0,30.0,Female,Taiwan,Resort,1500.0,Plane,1200.0
+Sydney,9.0,26.0,Male,Canada,Hostel,300.0,Plane,900.0
+London,5.0,38.0,Female,United Kingdom,Hotel,900.0,Train,150.0
+Phuket,7.0,45.0,Male,Singapore,Villa,2000.0,Plane,700.0
+Rome,7.0,31.0,Female,Italy,Hotel,1100.0,Train,250.0
+Santorini,7.0,27.0,Male,Greece,Airbnb,1000.0,Ferry,150.0
+Dubai,5.0,29.0,Female,United Arab Emirates,Hotel,1500.0,Car rental,300.0
+Phnom Penh,5.0,33.0,Male,Cambodia,Hostel,200.0,Plane,500.0
+Tokyo,9.0,32.0,Female,American,Hotel,1000.0,Plane,700.0
+Paris,7.0,47.0,Male,Canadian,Hotel,1200.0,Train,500.0
+Sydney,11.0,26.0,Female,Chinese,Airbnb,800.0,Plane,1000.0
+Rome,7.0,38.0,Male,Korean,Hotel,900.0,Train,400.0
+Bali,10.0,29.0,Female,Korean,Hostel,500.0,Plane,800.0
+Cancun,8.0,41.0,Male,American,Hotel,1300.0,Plane,600.0
+Athens,10.0,35.0,Female,Korean,Airbnb,700.0,Plane,900.0
+Tokyo,8.0,24.0,Male,Korean,Hotel,1200.0,Plane,700.0
+Sydney,10.0,30.0,Female,Chinese,Airbnb,900.0,Plane,1000.0
+Paris,8.0,28.0,Male,American,Hostel,400.0,Plane,700.0
+Bali,8.0,33.0,Female,Canadian,Hotel,800.0,Plane,800.0
+Paris,6.0,35.0,Male,American,Hotel,5000.0,Airplane,2500.0
+Tokyo,7.0,28.0,Female,British,Airbnb,7000.0,Train,1500.0
+Cape Town,9.0,45.0,Male,South African,Hostel,3000.0,Car,2000.0
+Sydney,6.0,31.0,Female,Australian,Hotel,6000.0,Airplane,3000.0
+Rome,7.0,42.0,Male,Korean,Airbnb,4000.0,Train,1500.0
+New York City,7.0,27.0,Female,American,Hotel,8000.0,Airplane,2500.0
+Rio de Janeiro,9.0,37.0,Male,Brazilian,Hostel,2500.0,Car,2000.0
+Vancouver,6.0,29.0,Female,Canadian,Hotel,5000.0,Airplane,3000.0
+Bangkok,7.0,34.0,Male,Chinese,Hostel,2000.0,Train,1000.0
+Barcelona,7.0,25.0,Female,Spanish,Airbnb,6000.0,Airplane,2500.0
+Auckland,7.0,39.0,Male,New Zealander,Hotel,7000.0,Train,2500.0
