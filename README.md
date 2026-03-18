@@ -626,7 +626,7 @@ NEXT_PUBLIC_APP_URL=                # e.g. https://myholiday.vercel.app
 
 | Limitation | Detail |
 |---|---|
-| **No payment processing** | The platform facilitates agreement on price but does not handle any financial transactions |
+| **No real payment processing** | The platform handle mock financial transactions |
 | **No real bookings** | Hotel and transport links redirect to third-party platforms — no in-app booking |
 | **Simulated guide verification** | Document review is performed by the admin within the system; not validated by actual licensing authorities |
 | **Static destination data** | The recommendation engine uses a predefined dataset, not live travel APIs or real-time pricing |
