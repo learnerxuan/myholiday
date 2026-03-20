@@ -2,9 +2,11 @@
 
 ## Overview
 
-Build the authentication flow (Login, Register, Forgot Password) and User Profile page using Supabase Auth. MyHoliday has three user roles: Traveller, Tour Guide, and Administrator. Access control is enforced via Supabase Row Level Security (RLS).
+Build the authentication flow (Login/Register via Google OAuth, Onboarding, User Profile) and session management using Supabase Auth. MyHoliday has three user roles: Traveller, Tour Guide, and Administrator. Access control is enforced via Supabase Row Level Security (RLS).
 
-**Dependencies:** Requires `01-project-setup` (Supabase client) and `02-ui-components` (Button, Input, Select).
+**Auth method: Google OAuth only.** There is no email/password form, no password validation, and no forgot-password flow. Supabase Auth handles all token management.
+
+**Dependencies:** Requires `01-project-setup` (Supabase client) and `02-ui-components` (Button, Input, Select, Spinner, Badge, Avatar).
 
 ---
 
@@ -13,7 +15,7 @@ Build the authentication flow (Login, Register, Forgot Password) and User Profil
 | Layer | Technology |
 |---|---|
 | Framework | Next.js 15 (App Router) |
-| Auth | Supabase Auth (email/password) |
+| Auth | Supabase Auth — Google OAuth provider |
 | Database | Supabase (PostgreSQL) with RLS |
 | Styling | Tailwind CSS with custom tokens |
 
@@ -23,9 +25,10 @@ Build the authentication flow (Login, Register, Forgot Password) and User Profil
 
 | Page | Route | Owner |
 |---|---|---|
-| Login | `app/auth/login/page.jsx` | ZL |
-| Register | `app/auth/register/page.jsx` | ZL |
-| Forgot Password | `app/auth/forgot-password/page.jsx` | ZL |
+| Login / Register | `app/auth/login/page.jsx` | ZL |
+| Auth Callback | `app/auth/callback/route.ts` | ZL |
+| Traveller Onboarding | `app/auth/onboarding/traveller/page.jsx` | ZL |
+| Guide Onboarding | `app/auth/onboarding/guide/page.jsx` | ZL |
 | User Profile | `app/profile/page.jsx` | ZL |
 
 ---
@@ -65,108 +68,212 @@ Build the authentication flow (Login, Register, Forgot Password) and User Profil
 
 ---
 
-## Database Schema (Relevant Tables)
+## Database Schema
+
+> ⚠️ The `users` table from the original README (with `password_hash`) is **dropped**. Supabase Auth manages accounts in `auth.users` internally. Your app tables link to it via `user_id`.
 
 ```sql
--- Core user accounts (managed by Supabase Auth)
-users
-  id, email, role, created_at
+-- auth.users — managed entirely by Supabase Auth (do not CREATE this table)
+-- Fields available: id, email, raw_user_meta_data->>'role', created_at
 
--- Traveller profile details
+-- Traveller profile (extra details used by AI planner)
 traveller_profiles
-  id, user_id, full_name, age, nationality,
-  dietary_restrictions, accessibility_needs, preferred_language
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID NOT NULL UNIQUE REFERENCES auth.users(id) ON DELETE CASCADE,
+  full_name VARCHAR(150),
+  age INTEGER,
+  nationality VARCHAR(100),
+  dietary_restrictions VARCHAR(100),
+  accessibility_needs BOOLEAN DEFAULT FALSE,
+  preferred_language VARCHAR(50) DEFAULT 'English',
+  created_at TIMESTAMP DEFAULT NOW()
 
--- Tour guide profiles
+-- Tour guide profile
 tour_guides
-  id, user_id, full_name, assigned_city,
-  verification_status, created_at
-
--- Guide uploaded documents (stored in Supabase Storage)
-guide_documents
-  id, guide_id, file_url, document_type, uploaded_at
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID NOT NULL UNIQUE REFERENCES auth.users(id) ON DELETE CASCADE,
+  full_name VARCHAR(150),
+  city_id UUID REFERENCES destinations(id) ON DELETE SET NULL,
+  document_url VARCHAR(500),
+  verification_status VARCHAR(20) NOT NULL DEFAULT 'pending'
+    CHECK (verification_status IN ('pending', 'approved', 'rejected')),
+  created_at TIMESTAMP DEFAULT NOW()
 ```
 
 ---
 
-## Authentication Flows
+## Authentication Flow
 
-### Register (Traveller)
-1. User fills in email, password, full name
-2. Call Supabase Auth `signUp` with email/password
-3. Set `role: 'traveller'` in user metadata
-4. Create a row in `traveller_profiles` with the user_id
-5. Redirect to profile page to complete optional fields
+### Step 1 — Login/Register Page (`app/auth/login/page.jsx`)
 
-### Register (Tour Guide)
-- Separate registration flow from traveller registration
-- Collects: email, password, full name, assigned city
-- Sets `role: 'guide'` in user metadata
-- Creates a row in `tour_guides` with `verification_status: 'pending'`
-- Guide must upload verification documents (licence/identification)
-- Documents stored in Supabase Storage
-- Guide cannot access marketplace until admin approves their account
+A single page for both new and returning users. No form fields.
 
-### Login
-1. Email + password form
-2. Call Supabase Auth `signInWithPassword`
-3. On success, redirect based on role:
-   - Traveller → homepage or quiz
-   - Guide → guide marketplace
-   - Admin → admin dashboard
-4. Show error message on failure
+- "Sign in with Google" button → calls `supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: '/auth/callback' } })`
+- For guides: a separate "Register as Tour Guide with Google" button — same OAuth call but sets intent in the redirect URL (e.g. `redirectTo: '/auth/callback?intent=guide'`)
+- After OAuth, Google handles the popup; Supabase handles the token exchange
 
-### Forgot Password
-1. User enters email
-2. Call Supabase Auth `resetPasswordForEmail`
-3. Show confirmation message that reset email has been sent
+### Step 2 — Auth Callback Route (`app/auth/callback/route.ts`)
+
+**This route is mandatory.** After Google redirects back, Supabase needs this to exchange the OAuth code for a session.
+
+```ts
+// app/auth/callback/route.ts
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from 'next/headers'
+import { NextResponse } from 'next/server'
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url)
+  const code = searchParams.get('code')
+  const intent = searchParams.get('intent') // 'guide' or null (traveller)
+
+  if (code) {
+    const supabase = createRouteHandlerClient({ cookies })
+    await supabase.auth.exchangeCodeForSession(code)
+  }
+
+  // Check if this is a new user (no profile row yet)
+  // → redirect to correct onboarding page
+  // Returning users → redirect to home
+  const redirectTo = intent === 'guide' ? '/auth/onboarding/guide' : '/auth/onboarding/traveller'
+  return NextResponse.redirect(new URL(redirectTo, request.url))
+}
+```
+
+### Step 3 — Onboarding (first-time users only)
+
+**Traveller Onboarding** (`app/auth/onboarding/traveller/page.jsx`):
+- Check if `traveller_profiles` row exists for this `user_id`
+- If row exists → skip onboarding → redirect to `/`
+- If not → show the onboarding form:
+  - Full name (pre-filled from Google), nationality, dietary restrictions, accessibility needs, preferred language
+  - On save: `INSERT INTO traveller_profiles (...)`, set `role: 'traveller'` in user metadata via `supabase.auth.updateUser`
+  - Redirect to homepage
+
+**Guide Onboarding** (`app/auth/onboarding/guide/page.jsx`):
+- Check if `tour_guides` row exists for this `user_id` → skip if found
+- If not → show guide onboarding form:
+  - Full name (pre-filled from Google)
+  - Assigned city — `Select` dropdown populated from `destinations` table (server-side fetch)
+  - Document upload — Supabase Storage bucket `guide-documents`
+  - On save: `INSERT INTO tour_guides (...)` with `verification_status: 'pending'`, set `role: 'guide'` in metadata
+  - Show message: *"Your account is pending admin approval."*
+
+### Step 4 — Returning Users
+
+On login, after the callback:
+- Fetch user metadata → read `role`
+- If `role === 'traveller'` → redirect to `homepage`
+- If `role === 'guide'` → redirect to `/guide/marketplace`
+- If `role === 'admin'` → redirect to `/admin`
 
 ### Logout
-- Call Supabase Auth `signOut`
-- Redirect to homepage
+
+```ts
+await supabase.auth.signOut()
+// redirect to '/'
+```
+
+Accessible from the Navbar (shown when session is active).
 
 ---
 
-## User Profile Page
+## Admin Account
 
-Accessible at `app/profile/page.jsx`. Requires authentication.
+Admins are **not created via the app**. They are seeded manually:
 
-### Traveller Profile Fields
-- Full name
-- Age
-- Nationality
-- Dietary restrictions (free text)
-- Accessibility needs (free text)
-- Preferred language
-
-These profile fields are used by the AI itinerary planner to personalise generated itineraries.
-
-### Tour Guide Profile Fields
-- Full name
-- Assigned city (read-only after registration)
-- Verification status (read-only — shown as badge)
-- Upload/replace verification documents
+1. Create the user in Supabase Auth via the Supabase Dashboard (Authentication → Users → Add user), or via a one-time SQL script
+2. Set their metadata to `{ "role": "admin" }` via the Dashboard or:
+```sql
+UPDATE auth.users
+SET raw_user_meta_data = '{"role": "admin"}'
+WHERE email = 'admin@myholiday.com';
+```
+3. No profile table row is required for admins
 
 ---
 
-## Session Management
+## Session Management & Middleware
 
-- Use Supabase Auth session handling
-- Persist session across page refreshes
-- Protect routes: redirect unauthenticated users to login
-- Role-based route protection: prevent travellers from accessing guide/admin routes and vice versa
+`middleware.ts` lives at the **project root** (not inside `app/`). It runs on every request and:
+- Reads the Supabase session from cookies
+- Redirects unauthenticated users to `/auth/login` for protected routes
+- Checks `role` from user metadata and blocks cross-role access:
+  - Travellers cannot access `/guide/*` or `/admin/*`
+  - Guides cannot access `/admin/*` or traveller-only routes
+  - Admins can access everything
+
+```ts
+// Protected route prefixes
+const TRAVELLER_ROUTES = ['/quiz', '/destinations', '/planner', '/my-plans', '/marketplace']
+const GUIDE_ROUTES     = ['/guide']
+const ADMIN_ROUTES     = ['/admin']
+```
+
+---
+
+## Profile Page (`app/profile/page.jsx`)
+
+Requires authentication. Shows different fields based on role.
+
+### Traveller view
+- Avatar (from Google profile photo), full name
+- Editable: nationality, age, dietary restrictions, accessibility needs, preferred language
+- Save → `UPDATE traveller_profiles SET ... WHERE user_id = ...`
+- Show success/error feedback
+
+### Tour Guide view
+- Avatar, full name
+- Assigned city — **read-only** after initial registration
+- Verification status — shown as `StatusBadge` (`pending` / `approved` / `rejected`)
+- Document upload/replace — re-upload to Supabase Storage, update `document_url`
+
+---
+
+## RLS Policies
+
+```sql
+-- traveller_profiles: own row only
+CREATE POLICY "Travellers own profile" ON traveller_profiles
+  FOR ALL USING (auth.uid() = user_id);
+
+-- tour_guides: own row only
+CREATE POLICY "Guides own profile" ON tour_guides
+  FOR ALL USING (auth.uid() = user_id);
+
+-- Admins can read all traveller profiles
+CREATE POLICY "Admin reads all traveller profiles" ON traveller_profiles
+  FOR SELECT USING (
+    (SELECT raw_user_meta_data->>'role' FROM auth.users WHERE id = auth.uid()) = 'admin'
+  );
+
+-- Admins can read all guide profiles
+CREATE POLICY "Admin reads all guide profiles" ON tour_guides
+  FOR SELECT USING (
+    (SELECT raw_user_meta_data->>'role' FROM auth.users WHERE id = auth.uid()) = 'admin'
+  );
+
+-- Admins can update guide verification_status
+CREATE POLICY "Admin updates guide verification" ON tour_guides
+  FOR UPDATE USING (
+    (SELECT raw_user_meta_data->>'role' FROM auth.users WHERE id = auth.uid()) = 'admin'
+  );
+
+-- Guide documents bucket: guide can upload/read own docs; admins can read all
+-- Set in Supabase Storage bucket policy (not SQL RLS)
+```
 
 ---
 
 ## Components Used (from `@/components/ui/`)
 
-- `Button` — form submit buttons, navigation
-- `Input` — email, password, name, text fields
-- `Select` — nationality, language dropdowns
+- `Button` — OAuth sign-in button, form submit, save changes
+- `Input` — name, nationality, dietary restrictions fields
+- `Select` — city dropdown (guide onboarding), language, nationality
 - `PageHeader` — page titles
-- `Spinner` — loading states
-- `Avatar` — profile picture display
-- `Badge` — verification status display
+- `Spinner` — loading states during OAuth redirect / save
+- `Avatar` — profile picture (from Google photo URL)
+- `Badge` / `StatusBadge` — guide verification status display
 
 ---
 

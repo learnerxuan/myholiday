@@ -1,26 +1,49 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* ── MyHoliday Design Tokens ─────────────────────────────── */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Colors */
+  --color-charcoal:   #1C1C1E;
+  --color-warmwhite:  #FAF9F6;
+  --color-amber:      #F5A623;
+  --color-amberdark:  #D4891A;
+  --color-error:      #D0021B;
+  --color-error-bg:   #FFF0F0;
+  --color-border:     #E5E5E5;
+  --color-secondary:  #6B7280;
+  --color-tertiary:   #9CA3AF;
+
+  /* Typography */
+  --font-display: 'Inter', system-ui, sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* ── Base resets ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-warmwhite);
+  color: var(--color-charcoal);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Reusable utility: input fields ─────────────────────── */
+.input-base {
+  width: 100%;
+  padding: 0.625rem 0.875rem;   /* py-2.5 px-3.5 */
+  border-radius: 0.75rem;       /* rounded-xl */
+  border: 1px solid var(--color-border);
+  font-size: 0.875rem;          /* text-sm */
+  color: var(--color-charcoal);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.input-base::placeholder {
+  color: var(--color-tertiary);
+}
+
+.input-base:focus {
+  border-color: var(--color-amber);
 }
