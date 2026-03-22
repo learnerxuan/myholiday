@@ -50,23 +50,23 @@ myholiday/
 ├── app/
 │   ├── layout.jsx                        ← Root layout — auto-adds Navbar + Footer to ALL pages
 │   ├── globals.css                       ← Base styles + font imports — do not re-import fonts
-│   ├── page.jsx                          ← Homepage (ZX)
+│   ├── page.jsx                          ← Homepage
 │   ├── auth/
-│   │   ├── login/page.jsx                ← Login (ZL)
-│   │   └── register/page.jsx             ← Register traveller + guide (ZL)
-│   ├── profile/page.jsx                  ← User profile (ZL)
+│   │   ├── login/page.jsx                ← Login
+│   │   └── register/page.jsx             ← Register traveller + guide
+│   ├── profile/page.jsx                  ← User profile
 │   ├── destinations/
-│   │   ├── page.jsx                      ← Destination listing + recommendation results (ZX/HS)
-│   │   └── [id]/page.jsx                 ← City detail (ES)
-│   ├── recommendations/page.jsx          ← Preference quiz (HS)
+│   │   ├── page.jsx                      ← Destination listing + recommendation results
+│   │   └── [id]/page.jsx                 ← City detail
+│   ├── recommendations/page.jsx          ← Preference quiz
 │   ├── itinerary/
-│   │   ├── page.jsx                      ← AI itinerary planner / chat (ES)
-│   │   └── my-plans/page.jsx             ← Saved itineraries (JW)
+│   │   ├── page.jsx                      ← AI itinerary planner / chat
+│   │   └── my-plans/page.jsx             ← Saved itineraries
 │   ├── marketplace/
-│   │   ├── page.jsx                      ← Listing board — traveller + guide views (FR)
-│   │   ├── new/page.jsx                  ← Create listing form (FR)
-│   │   └── [id]/page.jsx                 ← Listing detail + offers + chat (FR)
-│   ├── dashboard/page.jsx                ← Admin dashboard (HS)
+│   │   ├── page.jsx                      ← Listing board — traveller + guide views
+│   │   ├── new/page.jsx                  ← Create listing form
+│   │   └── [id]/page.jsx                 ← Listing detail + offers + chat
+│   ├── dashboard/page.jsx                ← Admin dashboard
 │   └── api/                              ← All API routes — one file per resource
 │       ├── auth/route.js
 │       ├── destinations/route.js
@@ -83,7 +83,7 @@ myholiday/
 │       ├── transactions/route.js
 │       └── dashboard/marketplace/route.js
 ├── components/
-│   ├── ui/                               ← ZX owns all of these — import, never recreate
+│   ├── ui/                               ← import, never recreate
 │   │   ├── Button.jsx
 │   │   ├── Input.jsx
 │   │   ├── Select.jsx
